@@ -1,0 +1,172 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Rearctor/signal/specs/signal.schema.json",
+  "title": "Signal Snapshot (draft)",
+  "description": "DRAFT. A set of observed signals for a single subject at a single block height. Field names and value domains are under research and are not final. No thresholds are defined in this repository; a snapshot therefore records the threshold that was applied rather than referencing a canonical one.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "subject",
+    "observed_at",
+    "signals"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "description": "Draft revision of the snapshot format. Not a released version number.",
+      "pattern": "^0[.][0-9]+$"
+    },
+    "subject": {
+      "type": "object",
+      "description": "What the signals describe. A snapshot covers exactly one subject.",
+      "required": [
+        "kind",
+        "identifier"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "reaction",
+            "creator"
+          ]
+        },
+        "identifier": {
+          "type": "string",
+          "description": "Reaction identifier or creator address. Creator identity is an unresolved problem; see research/creator-attribution.md.",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "attribution_confidence": {
+          "type": "string",
+          "description": "Only meaningful for kind=creator. Records how the subject was resolved. 'declared' and 'heuristic' carry materially different weight and must not be presented identically.",
+          "enum": [
+            "single-address",
+            "declared",
+            "heuristic"
+          ]
+        }
+      }
+    },
+    "observed_at": {
+      "type": "object",
+      "description": "Chain position at which the snapshot was computed. A signal without a block height is not reproducible.",
+      "required": [
+        "block_height",
+        "block_hash"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "block_height": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "block_hash": {
+          "type": "string",
+          "pattern": "^0x[0-9a-f]{64}$"
+        },
+        "confirmations": {
+          "type": "integer",
+          "description": "Confirmations behind tip at evaluation. Consumers may reject snapshots below their own finality requirement.",
+          "minimum": 0
+        }
+      }
+    },
+    "signals": {
+      "type": "array",
+      "description": "Observed labels. An empty array means no catalogued condition was observed - it does not mean the opposite of any label holds.",
+      "items": {
+        "$ref": "#/$defs/signal"
+      }
+    },
+    "metrics": {
+      "type": "object",
+      "description": "Raw derived values behind the labels, published so a reader can check the underlying fact. Intentionally open: the metric set is under research.",
+      "additionalProperties": true
+    },
+    "notes": {
+      "type": "string",
+      "description": "Free-text annotation. Not interpreted. Used to mark illustrative snapshots as non-normative.",
+      "maxLength": 2000
+    }
+  },
+  "$defs": {
+    "signal": {
+      "type": "object",
+      "required": [
+        "label",
+        "window",
+        "threshold_applied"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "label": {
+          "type": "string",
+          "description": "Catalogued condition. See catalog/signals.md. Labels are descriptive, never predictive or evaluative.",
+          "enum": [
+            "NEAR_CRITICAL_MASS",
+            "ACCELERATING",
+            "HIGH_HOLDER_CONCENTRATION",
+            "BUY_PRESSURE",
+            "CREATOR_HISTORY"
+          ]
+        },
+        "window": {
+          "type": "object",
+          "description": "Block range the derivation covered. Required even for point-in-time signals, where from_block equals to_block.",
+          "required": [
+            "from_block",
+            "to_block"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "from_block": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "to_block": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        },
+        "threshold_applied": {
+          "type": "object",
+          "description": "The threshold used to produce this label. Recorded per snapshot because no canonical thresholds exist; this makes a disputed label checkable.",
+          "required": [
+            "expression",
+            "status"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "expression": {
+              "type": "string",
+              "description": "Human-readable statement of the condition tested.",
+              "maxLength": 500
+            },
+            "status": {
+              "type": "string",
+              "description": "Every threshold in this repository is 'unresolved'. 'provisional' and 'agreed' are reserved for future use and are not in use.",
+              "enum": [
+                "unresolved",
+                "provisional",
+                "agreed"
+              ]
+            }
+          }
+        },
+        "observed_value": {
+          "type": "string",
+          "description": "The measured value that met the threshold, as a decimal string to avoid float precision loss."
+        },
+        "limitations": {
+          "type": "string",
+          "description": "Known weaknesses of this particular observation.",
+          "maxLength": 1000
+        }
+      }
+    }
+  }
+}

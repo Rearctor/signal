@@ -1,0 +1,63 @@
+{
+  "schema_version": "0.1",
+  "subject": {
+    "kind": "reaction",
+    "identifier": "reaction-0000000000000000000000000000000000000000000000000000000000000001"
+  },
+  "observed_at": {
+    "block_height": 4821993,
+    "block_hash": "0x7c1f0a3b9e5d2648af13c07b5e8d94a21f6b0c3d8e47a95f2b1c6d0e3a748b52",
+    "confirmations": 64
+  },
+  "signals": [
+    {
+      "label": "NEAR_CRITICAL_MASS",
+      "window": {
+        "from_block": 4821993,
+        "to_block": 4821993
+      },
+      "threshold_applied": {
+        "expression": "reserves_usdc >= 0.90 * 5042000000 (i.e. 90% of the 5,042 USDC ignition threshold)",
+        "status": "unresolved"
+      },
+      "observed_value": "4712880000",
+      "limitations": "The 90% figure is illustrative and has not been agreed. Distance to threshold is not a statement about whether the remaining distance will be covered."
+    },
+    {
+      "label": "BUY_PRESSURE",
+      "window": {
+        "from_block": 4818400,
+        "to_block": 4821993
+      },
+      "threshold_applied": {
+        "expression": "buy_volume_usdc / (buy_volume_usdc + sell_volume_usdc) >= 0.70 over the window",
+        "status": "unresolved"
+      },
+      "observed_value": "0.7431",
+      "limitations": "Directional volume ratio is manipulable by a participant willing to trade against themselves; the window length materially changes the result and has not been agreed."
+    },
+    {
+      "label": "HIGH_HOLDER_CONCENTRATION",
+      "window": {
+        "from_block": 4821993,
+        "to_block": 4821993
+      },
+      "threshold_applied": {
+        "expression": "sum(top_10_holder_balances) / circulating_supply >= 0.50, excluding the reaction contract",
+        "status": "unresolved"
+      },
+      "observed_value": "0.6187",
+      "limitations": "Address count is not holder count. Concentration measured across addresses says nothing about how many distinct parties hold. Exclusion set is incomplete: routers and custodial addresses are not yet classified."
+    }
+  ],
+  "metrics": {
+    "reserves_usdc": "4712880000",
+    "ignition_threshold_usdc": "5042000000",
+    "distinct_holding_addresses": 341,
+    "buy_volume_usdc_window": "1884200000",
+    "sell_volume_usdc_window": "651300000",
+    "reserve_delta_window_usdc": "612400000",
+    "window_blocks": 3593
+  },
+  "notes": "ILLUSTRATIVE AND NON-NORMATIVE. Every threshold expression in this snapshot carries status 'unresolved': the 90%, 0.70 and 0.50 figures are placeholders used to exercise the schema, not agreed cutoffs. Block heights, balances and volumes are invented. The only figure here that is a protocol fact is the 5,042 USDC ignition threshold. Illustrative only. Not protocol defaults or committed parameters."
+}

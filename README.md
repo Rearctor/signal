@@ -89,6 +89,26 @@ judgement about the reaction.
   an identity claim?
 - How can labels be published so that they remain independently reproducible?
 
+## Research workspace
+
+Current design work is organized across architecture notes, a signal catalogue and
+draft specifications. Everything below is concept and research: no implementation
+exists, and no threshold has been agreed.
+
+**Architecture**
+- [Signal model](docs/signal-model.md) - observable, reproducible, descriptive, non-predictive
+- [Telemetry pipeline](docs/telemetry-pipeline.md) - chain events through to public telemetry
+
+**Catalogue**
+- [Signal catalogue](catalog/signals.md) - candidate signals with inputs, limitations and unresolved thresholds
+
+**Draft specifications**
+- [Signal schema](specs/signal.schema.json) - draft JSON Schema for a signal snapshot
+- [Example: signal snapshot](examples/signal-snapshot.json) - a snapshot conforming to the draft schema
+
+**Open research**
+- [Creator attribution](research/creator-attribution.md) - associating addresses with a creator without unsupported identity assumptions
+
 ## Links
 
 [Website](https://rearctor.io) · [Docs](https://rearctor.io/docs) · [GitHub](https://github.com/Rearctor) · [X](https://x.com/JoinRearctor) · [Telegram](https://t.me/rearctor)
