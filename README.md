@@ -109,6 +109,16 @@ exists, and no threshold has been agreed.
 **Open research**
 - [Creator attribution](research/creator-attribution.md) - associating addresses with a creator without unsupported identity assumptions
 
+## v0 design work
+
+Early design work is tracked through the v0 specification, implementation plan and open
+GitHub Issues. These are draft design targets. Nothing is implemented, deployed or
+scheduled.
+
+- [v0 design specification](docs/v0/design-spec.md)
+- [Implementation plan](docs/v0/implementation-plan.md)
+- [Open issues](../../issues)
+
 ## Links
 
 [Website](https://rearctor.io) · [Docs](https://rearctor.io/docs) · [GitHub](https://github.com/Rearctor) · [X](https://x.com/JoinRearctor) · [Telegram](https://t.me/rearctor)
